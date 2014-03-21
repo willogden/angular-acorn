@@ -1,0 +1,18 @@
+{
+  "name": "angular-bourbon-susy-seed",
+  "version": "0.0.1",
+  "devDependencies": {
+    "angular": "~1.0.7",
+    "angular-mocks": "~1.0.7",
+    "angular-ui-router": "~0.0.1",
+    "angular-ui-utils": "~0.0.3",
+    "html5shiv": "~3.7.0",
+    "bourbon": "~3.2.0-beta.2",
+    "breakpoint-sass": "~2.4.1",
+    "normalize-css": "~3.0.0",
+    "susy": "~2.1.0"
+  },
+  "dependencies": {
+
+  }
+}

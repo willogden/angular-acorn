@@ -1,0 +1,56 @@
+.home {
+	
+	$small-columns: susy-get(columns, $layout-small);
+	
+	.home__content-one,
+	.home__content-two {
+		padding:10px;
+	}
+
+	@include susy-breakpoint(max-width $bp-med, $layout-small) {
+		
+		.home__content-one {
+	  		@include transition (all 1.0s ease-in-out);
+	  		@include span($small-columns at 1 isolate);
+	  	}
+
+	  	.home__content-two {
+	  		@include transition (all 1.0s ease-in-out);
+	  		@include span($small-columns at span($small-columns wide) isolate);
+	  	}
+
+	  	.home__content-one--hidden {
+	  		@include transition (all 1.0s ease-in-out);
+	  		@include span($small-columns at span(0-$small-columns wide) isolate);
+	  	}
+
+	  	.home__content-two--visible {
+	  		@include transition (all 1.0s ease-in-out);
+	  		@include span($small-columns at 1 isolate);
+	  	}
+  	}
+
+  	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {	
+  		
+  		/* Get number of columns */
+		$layout-med-columns: susy-get(columns,$layout-med);
+
+		$column_size: $layout-med-columns/2;
+
+		.home__content-one__page-button {
+			display: none;
+		}
+
+  		.home__content-one {
+  			
+  			@include span($layout-med-columns/2 of $layout-med-columns);
+  			
+  		}
+
+  		.home__content-two {
+  			
+  			@include span($layout-med-columns/2 of $layout-med-columns);
+
+  		}
+  	}
+}

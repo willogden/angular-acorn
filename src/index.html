@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]>
+<html ng-app="ngBoilerplate" ng-controller="AppCtrl" class="no-mqs">
+<![endif]-->
+<!--[if !IE ]><!-->
+<html ng-app="ngBoilerplate" ng-controller="AppCtrl">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title ng-bind="pageTitle"></title>
+    <link type="text/css" rel="stylesheet" media="all" href="app.css">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="../vendor/html5shiv/dist/html5shiv.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+  <body>
+    <header>
+       <button ng-click="toggleNavClass()">MENU</button>
+       <h3>ng-boilerplate <small><a href="#">v<%= version %></a></small></h3>
+    </header>
+    <nav ng-class="navClass">
+      <ul>
+        <li ui-route="/home" ng-class="{active:$uiRoute}">
+          <a href="#/home">
+            <i></i>
+            Home
+          </a>
+        </li>
+        <li ui-route="/about" ng-class="{active:$uiRoute}">
+          <a href="#/about">
+            <i></i>
+            What is it?
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <main ui-view="main"></main>
+
+    <footer class="footer">
+
+    </footer>
+  </body>
+</html>

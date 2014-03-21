@@ -1,0 +1,32 @@
+/*
+%button {
+  @include button(simple, $base-accent-color);
+  font-size: $base-font-size;
+}
+*/
+
+%button {
+	background-color:#ffffff;
+	@include border-top-radius(3px);
+	@include border-bottom-radius(3px);
+	@include border-left-radius(3px);
+	@include border-right-radius(3px);
+	text-indent:0;
+	border:2px solid $base-accent-color;
+	display:inline-block;
+	color:$base-font-color;
+	font-family:$base-font-family;
+	font-size: $base-font-size;
+	font-weight:bold;
+	font-style:normal;
+	line-height:$base-line-height;
+	text-decoration:none;
+	text-align:center;
+}
+%button:hover {
+
+}
+%button:active {
+	position:relative;
+	top:1px;
+}

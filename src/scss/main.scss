@@ -1,0 +1,130 @@
+/* Import Bourbon */
+@import "../../vendor/bourbon/dist/_bourbon.scss";
+@import "../../vendor/susy/sass/_susy.scss";
+@import "../../vendor/breakpoint-sass/stylesheets/_breakpoint.scss";
+@import "../../src/scss/_bitters.scss";
+
+$susy: (
+  columns: 4,
+  gutters: .25,
+  gutter-position: inside,
+);
+
+$bp-small : 24em;
+$bp-med : 46.8em;
+$bp-large : 50em;
+$bp-xl : 73em;
+
+$layout-small: layout(4);
+$layout-med: layout(8);
+$layout-large: layout(12);
+$layout-xl: layout(16);
+
+$breakpoint-no-query-fallbacks: true;
+
+html {
+	height:100%;
+}
+
+body {
+	height:100%;
+	@include container($layout-xl);
+}
+
+header {
+
+	padding: 10px;
+
+	button {
+		margin: 5px;
+		float: right;
+		width: 4em;
+	}
+
+	h3 {
+		float:left;
+	}
+
+	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
+
+		padding: 80px 0px 10px 0px;
+
+		@include span(3 at 2 isolate);
+
+		button {
+			display: none;
+		}
+	}
+}
+
+nav {
+
+	border-top: 2px solid $base-accent-color;
+	border-right: 2px solid $base-accent-color;
+	border-bottom: 2px solid $base-accent-color;
+
+	@include border-right-radius(3px);
+
+	ul {
+		li {
+			padding: 5px;
+		}
+	}
+
+	@include span(3 at span(-3 wide) isolate);
+
+	@include susy-breakpoint(max-width $bp-med, $layout-small) {
+		height:100%;
+		@include transition (all 1.0s ease-in-out);
+		@include break;
+	}
+
+	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
+
+		height:initial;
+		border: none;
+		padding: 80px 0px 10px 0px;
+
+		@include span(3 at 5 isolate);
+
+		ul {
+			float: right;
+
+			li {
+				float: left;
+				padding: 5px 20px 5px 20px;
+			}
+		}
+	}
+}
+
+main {
+
+	height:100%;
+	background-color: $light-gray;
+
+	@include span(full at 1 isolate);
+
+	@include susy-breakpoint(max-width $bp-med, $layout-med) {
+		@include transition (all 1.0s ease-in-out);
+	}
+
+	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
+		@include span(full at 1 isolate break);
+	}
+}
+
+nav.nav__visible {
+	@include push(0);
+
+    ~ main {
+    	@include push(3);
+    }
+}
+
+
+/* Introspected imports */
+
+/* inject:scss */
+/* any *.scss files among your sources will go here as: @import "FILE"; */
+/* endinject */

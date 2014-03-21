@@ -1,0 +1,19 @@
+<div class="home" ng-controller="HomeCtrl">
+	<div class="home__content-one" ng-class="{'home__content-one--hidden': page==2}">
+		<h4>Home Content 1</h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et eros vitae nisi dapibus ultricies. Quisque euismod posuere fringilla. In vel est sit amet felis accumsan commodo. Proin purus dolor, tincidunt at magna sit amet, tristique semper nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec lectus rutrum, sagittis ipsum id, ornare libero. Suspendisse potenti. Integer ultrices lorem in leo imperdiet, at interdum tortor bibendum. Proin at risus a mi commodo consectetur.
+		</p>
+		<p>
+			Ut id justo eget risus vestibulum tempus sed mollis metus. Etiam consectetur ipsum ac imperdiet ornare. Pellentesque auctor aliquet odio, at iaculis ligula. Nam suscipit diam ac risus sagittis, non iaculis libero malesuada. Maecenas dapibus nec nisl non semper. Sed iaculis malesuada sagittis. Aenean vel interdum enim. Aenean viverra consequat pretium. Integer vitae lorem rhoncus, rutrum orci eu, aliquet augue. Curabitur neque arcu, auctor quis adipiscing a, vehicula quis mi. Integer adipiscing vitae enim ac gravida. Donec purus lorem, ullamcorper in sodales ac, tempus vitae ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+		</p>
+		<button class="home__content-one__page-button" ng-click="nextPage()">Next Page</button>
+	</div>
+	<div class="home__content-two" ng-class="{'home__content-two--visible': page==2}">
+		<h4>Home Content 2</h4>
+		<p>
+			Duis cursus lorem ac gravida faucibus. Phasellus luctus ligula vel nulla pulvinar dictum. Morbi non sapien eget neque sodales faucibus ut at tortor. Aliquam eget eleifend turpis. Sed metus augue, pellentesque nec ante a, suscipit sodales leo. Nulla auctor eu justo quis viverra. Morbi vel auctor lorem. Nunc porta facilisis ultrices. Vivamus et ultricies velit. Quisque dictum adipiscing velit eget adipiscing. Cras laoreet felis et consequat laoreet. Morbi commodo velit sed tortor mattis, eu rhoncus turpis ultrices.
+		</p>
+		<button class="home__content-one__page-button" ng-click="previousPage()">Previous Page</button>
+	</div>
+</div>
