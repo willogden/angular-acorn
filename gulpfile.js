@@ -12,6 +12,7 @@ var inject = require("gulp-inject");
 var sass = require('gulp-ruby-sass');
 var rename = require('gulp-rename');
 var ngmin = require('gulp-ngmin');
+var template = require('gulp-template');
 var pkg = require('./package.json');
 
 /**
@@ -116,6 +117,7 @@ gulp.task('css', ['sass'], function() {
 
 gulp.task('html', function() {
     return gulp.src('./src/index.html')
+        .pipe(template(pkg))
         .pipe(gulp.dest(env.destFolder));
 });
 

@@ -2,6 +2,8 @@
 	
 	$small-columns: susy-get(columns, $layout-small);
 	
+	overflow-x: hidden;
+
 	.home__content-one,
 	.home__content-two {
 		padding:10px;

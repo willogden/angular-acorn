@@ -8,7 +8,7 @@ require('../../build/templates');
 var home = require('./home/home');
 var about = require('./about/about');
 
-angular.module( 'ngBoilerplate', [
+angular.module( 'angularAcornApp', [
   home.name,
   about.name,
   'ui.state',
@@ -25,7 +25,7 @@ angular.module( 'ngBoilerplate', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
-      $scope.pageTitle = toState.data.pageTitle + ' | ngBoilerplate' ;
+      $scope.pageTitle = toState.data.pageTitle + ' | angularAcornApp' ;
     }
   });
 

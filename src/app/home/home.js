@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = angular.module('ngBoilerplate.home', [
+module.exports = angular.module('angularAcornApp.home', [
   'home/home.tpl.html',
   'ui.state'
 ])
