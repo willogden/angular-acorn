@@ -12,7 +12,6 @@ var inject = require("gulp-inject");
 var sass = require('gulp-ruby-sass');
 var rename = require('gulp-rename');
 var ngmin = require('gulp-ngmin');
-var exorcist = require('exorcist');
 var pkg = require('./package.json');
 
 /**
