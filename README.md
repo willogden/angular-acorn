@@ -1,7 +1,7 @@
 angular-acorn
 =============
 
-AngularJS seed project using Browserify, Bourbon, Susy Next, and Gulp
+AngularJS seed project using Browserify, Bourbon, Susy Next, and Gulp. Inspired by [ngBoilerplate](http://joshdmiller.github.com/ng-boilerplate).
 
 ## Installation
 
