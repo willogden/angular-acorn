@@ -13,6 +13,7 @@ var sass = require('gulp-ruby-sass');
 var rename = require('gulp-rename');
 var ngmin = require('gulp-ngmin');
 var template = require('gulp-template');
+var karma = require('gulp-karma');
 var pkg = require('./package.json');
 
 /**
@@ -36,10 +37,10 @@ String.prototype.format = function() {
 
 gulp.task('clean', function() {
 
-    return gulp.src(['./dist','./build'], {
+    return gulp.src(['./dist', './build'], {
         read: false
     })
-    .pipe(clean());
+        .pipe(clean());
 
 });
 
@@ -123,18 +124,46 @@ gulp.task('html', function() {
 
 
 gulp.task('js', ['browserify'], function() {
-    
-	return gulp.src('./build/templates.js', {
+
+    return gulp.src('./build/templates.js', {
         read: false
     })
-    .pipe(clean({
-        force: true
-    }));
-	
+        .pipe(clean({
+            force: true
+        }));
+
 });
 
 
-gulp.task('build',['clean'],function() {
+gulp.task('create-tests', ['templates'], function() {
+
+    return gulp.src('./src/app/tests.js')
+        .pipe(inject(gulp.src(["./src/app/**/*_test.js"], {
+            read: false
+        }), {
+            transform: function(filepath) {
+                return "require('.." + filepath + "');"
+            },
+            starttag: "/* inject:js */",
+            endtag: "/* endinject */"
+        }))
+        .pipe(gulp.dest('./build'));
+});
+
+
+gulp.task('browserify-tests', ['create-tests'], function() {
+
+    var bundleStream = browserify('./build/tests.js').bundle({
+        debug: true
+    })
+        .pipe(source('../tests.js'));
+
+    return bundleStream.pipe(gulp.dest('./build/tests.js'));
+
+});
+
+
+gulp.task('build', ['clean'], function() {
     env.production = false;
     env.destFolder = './build';
 
@@ -143,12 +172,22 @@ gulp.task('build',['clean'],function() {
 });
 
 
-gulp.task('release',['clean'],function() {
+gulp.task('release', ['clean'], function() {
     env.production = true;
     env.destFolder = './dist';
 
     // Must use start to ensure clean has completed
     gulp.start('js', 'css', 'html');
+});
+
+
+gulp.task('test', ['browserify-tests'], function() {
+
+    return gulp.src(['./build/tests.js'])
+        .pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'watch'
+        }));
 });
 
 
