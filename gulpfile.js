@@ -14,6 +14,7 @@ var rename = require('gulp-rename');
 var ngmin = require('gulp-ngmin');
 var template = require('gulp-template');
 var karma = require('gulp-karma');
+var livereload = require('gulp-livereload');
 var pkg = require('./package.json');
 
 /**
@@ -34,6 +35,27 @@ String.prototype.format = function() {
     );
 };
 
+/**
+* Live reload server
+*/
+var server = livereload();
+
+
+/**
+* Set environment vars
+*/
+var setProduction = function(isProduction) {
+    
+    if(isProduction) {
+        env.production = true;
+        env.destFolder = './dist';
+    }
+    else {    
+        env.production = false;
+        env.destFolder = './build';
+    }
+
+};
 
 gulp.task('clean', function() {
 
@@ -112,7 +134,8 @@ gulp.task('css', ['sass'], function() {
             .pipe(minifyCSS());
     }
 
-    return cssPipe.pipe(gulp.dest(env.destFolder))
+    return cssPipe
+        .pipe(gulp.dest(env.destFolder));
 });
 
 
@@ -128,9 +151,9 @@ gulp.task('js', ['browserify'], function() {
     return gulp.src('./build/templates.js', {
         read: false
     })
-        .pipe(clean({
-            force: true
-        }));
+    .pipe(clean({
+        force: true
+    }));
 
 });
 
@@ -164,20 +187,22 @@ gulp.task('browserify-tests', ['create-tests'], function() {
 
 
 gulp.task('build', ['clean'], function() {
-    env.production = false;
-    env.destFolder = './build';
+    
+    setProduction(false);
 
     // Must use start to ensure clean has completed
     gulp.start('js', 'css', 'html');
+
 });
 
 
 gulp.task('release', ['clean'], function() {
-    env.production = true;
-    env.destFolder = './dist';
+    
+    setProduction(true);
 
     // Must use start to ensure clean has completed
     gulp.start('js', 'css', 'html');
+
 });
 
 
@@ -186,11 +211,26 @@ gulp.task('test', ['browserify-tests'], function() {
     return gulp.src(['./build/tests.js'])
         .pipe(karma({
             configFile: 'karma.conf.js',
-            action: 'watch'
+            action: 'run'
         }));
 });
 
 
-gulp.task('default', ['build'], function() {
+gulp.task('default', ['build','watch'], function() {
+
+});
+
+
+gulp.task('watch', function() {
+    
+    setProduction(false);
+
+    gulp.watch(['./src/app/**/*.js','./src/app/**/*.html'],['js']);
+    gulp.watch(['./src/app/**/*.scss','./src/scss/**/*.scss'],['css']);
+    gulp.watch(['./build/app.js'],['test']);
+
+    gulp.watch('./build/**').on('change', function(file) {
+        server.changed(file.path);
+    });
 
 });

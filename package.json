@@ -24,7 +24,8 @@
     "gulp-karma": "0.0.4",
     "karma-phantomjs-launcher": "~0.1.2",
     "karma-jasmine": "~0.1.5",
-    "karma-chrome-launcher": "~0.1.2"
+    "karma-chrome-launcher": "~0.1.2",
+    "gulp-livereload": "~1.2.0"
   },
   "config": {
     "paths": {
