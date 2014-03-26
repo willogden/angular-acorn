@@ -23,4 +23,4 @@ module.exports = angular.module('angularAcornApp.home', [
     });
     
 })
-.controller('HomeCtrl', HomeCtrl);
+.controller('HomeCtrl', ['$scope', '$http',HomeCtrl]);

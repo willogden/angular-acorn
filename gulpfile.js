@@ -17,6 +17,9 @@ var karma = require('gulp-karma');
 var livereload = require('gulp-livereload');
 var pkg = require('./package.json');
 
+// Live reload server
+var server = livereload();
+
 /**
  * Store environment variables
  */
@@ -36,27 +39,68 @@ String.prototype.format = function() {
 };
 
 /**
-* Live reload server
-*/
-var server = livereload();
-
-
-/**
 * Set environment vars
 */
-var setProduction = function(isProduction) {
+var setRelease = function(isRelease) {
     
-    if(isProduction) {
-        env.production = true;
+    if(isRelease) {
+        env.release = true;
         env.destFolder = './dist';
     }
     else {    
-        env.production = false;
+        env.release = false;
         env.destFolder = './build';
     }
 
 };
 
+/**
+* css helper
+*/
+var processCSS = function(srcArray,destFilename) {
+
+    if(srcArray.length > 0) {
+
+        var cssPipe = gulp.src(srcArray)
+            .pipe(concat(destFilename));
+
+        if (env.release) {
+            cssPipe = cssPipe
+                .pipe(minifyCSS());
+        }
+
+        return cssPipe
+            .pipe(gulp.dest(env.destFolder));
+    }
+
+}
+
+/**
+* JS helper
+*/
+var processJS = function(srcArray,destFilename) {
+
+    if(srcArray.length > 0) {
+
+        var jsPipe = gulp.src(srcArray);
+            
+        // Only uglify in release builds
+        if (env.release) {
+
+            jsPipe = jsPipe
+                .pipe(uglify());
+        }
+
+        return jsPipe
+            .pipe(concat(destFilename))
+            .pipe(gulp.dest(env.destFolder));
+    }
+
+}
+
+/**
+* Clean the build and dist directorys
+*/
 gulp.task('clean', function() {
 
     return gulp.src(['./dist', './build'], {
@@ -66,7 +110,9 @@ gulp.task('clean', function() {
 
 });
 
-
+/**
+* Convert the html partials into js file to be required into Browserify
+*/
 gulp.task('templates', function() {
 
     return gulp.src("./src/**/*.tpl.html")
@@ -84,27 +130,28 @@ gulp.task('templates', function() {
 
 });
 
-
+/**
+* Browserify app
+*/
 gulp.task('browserify', ['templates'], function() {
 
     var bundleStream = browserify('./src/app/app.js').bundle({
-        debug: !env.production
-    });
+        debug: !env.release
+    }).pipe(source('../app.js'));
 
-    bundleStream = bundleStream
-        .pipe(source('../app.js'));
-
-    if (env.production) {
+    // Make safe for minification
+    if (env.release) {
         bundleStream = bundleStream
-            .pipe(streamify(ngmin()))
-            .pipe(streamify(uglify()));
+            .pipe(streamify(ngmin()));
     }
 
     return bundleStream.pipe(gulp.dest('{0}/app.js'.format(env.destFolder)));
 
 });
 
-
+/**
+* Introspect src folder for sass files, then preprocess
+*/
 gulp.task('sass', function() {
 
     return gulp.src('./src/scss/main.scss')
@@ -123,41 +170,62 @@ gulp.task('sass', function() {
 
 });
 
-
+/**
+* Concat external css files and app css
+*/
 gulp.task('css', ['sass'], function() {
 
-    var cssPipe = gulp.src(pkg.config.paths.stylesheets.concat(['{0}/app.css'.format(env.destFolder)]))
-        .pipe(concat('app.css'));
+    return processCSS(pkg.config.paths["stylesheets"].concat(['{0}/app.css'.format(env.destFolder)]),'app.css');
 
-    if (env.production) {
-        cssPipe = cssPipe
-            .pipe(minifyCSS());
-    }
-
-    return cssPipe
-        .pipe(gulp.dest(env.destFolder));
 });
 
+/**
+* Concat external css specific to IE
+*/
+gulp.task('css-ie', ['sass'], function() {
 
+    return processCSS(pkg.config.paths["stylesheets-ie"],'app-ie.css');
+
+});
+
+/**
+* Copy & template index.html to destination folder
+*/
 gulp.task('html', function() {
     return gulp.src('./src/index.html')
         .pipe(template(pkg))
         .pipe(gulp.dest(env.destFolder));
 });
 
-
+/**
+* Concat external js and app js
+*/
 gulp.task('js', ['browserify'], function() {
 
-    return gulp.src('./build/templates.js', {
+    // Remove templates.js as browserify'ed into app.js already
+    gulp.src('./build/templates.js', {
         read: false
     })
     .pipe(clean({
         force: true
     }));
 
+    return processJS(pkg.config.paths["scripts"].concat(['{0}/app.js'.format(env.destFolder)]),'app.js');
+
 });
 
+/**
+* Concat external js specific to IE
+*/
+gulp.task('js-ie', function() {
 
+    return processJS(pkg.config.paths["scripts-ie"],'app-ie.js');
+
+});
+
+/**
+* Introspect for tests and create test entrypoint js file for Browserify
+*/
 gulp.task('create-tests', ['templates'], function() {
 
     return gulp.src('./src/app/tests.js')
@@ -173,39 +241,46 @@ gulp.task('create-tests', ['templates'], function() {
         .pipe(gulp.dest('./build'));
 });
 
-
+/**
+* Browserify tests
+*/
 gulp.task('browserify-tests', ['create-tests'], function() {
 
-    var bundleStream = browserify('./build/tests.js').bundle({
+    return browserify('./build/tests.js').bundle({
         debug: true
     })
-        .pipe(source('../tests.js'));
-
-    return bundleStream.pipe(gulp.dest('./build/tests.js'));
+    .pipe(source('../tests.js'))
+    .pipe(gulp.dest('./build/tests.js'));
 
 });
 
-
+/**
+* Create build version
+*/
 gulp.task('build', ['clean'], function() {
     
-    setProduction(false);
+    setRelease(false);
 
     // Must use start to ensure clean has completed
-    gulp.start('js', 'css', 'html');
+    gulp.start('js', 'js-ie', 'css', 'css-ie', 'html');
 
 });
 
-
+/**
+* Create release version
+*/
 gulp.task('release', ['clean'], function() {
     
-    setProduction(true);
+    setRelease(true);
 
     // Must use start to ensure clean has completed
-    gulp.start('js', 'css', 'html');
+    gulp.start('js', 'js-ie', 'css', 'css-ie', 'html');
 
 });
 
-
+/**
+* Run tests
+*/
 gulp.task('test', ['browserify-tests'], function() {
 
     return gulp.src(['./build/tests.js'])
@@ -215,17 +290,23 @@ gulp.task('test', ['browserify-tests'], function() {
         }));
 });
 
+/**
+* Create build version then watch for changes
+*/
+gulp.task('default', ['build'], function() {
 
-gulp.task('default', ['build','watch'], function() {
+    gulp.start('watch');
 
 });
 
-
+/**
+* Watch for changes
+*/
 gulp.task('watch', function() {
-    
-    setProduction(false);
 
-    gulp.watch(['./src/app/**/*.js','./src/app/**/*.html'],['js']);
+    setRelease(false);
+
+    gulp.watch(['./src/app/**/*.js','./src/**/*.html'],['js','html']);
     gulp.watch(['./src/app/**/*.scss','./src/scss/**/*.scss'],['css']);
     gulp.watch(['./build/app.js'],['test']);
 

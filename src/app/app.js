@@ -22,4 +22,4 @@ module.exports = angular.module('angularAcornApp', [
 })
 
 .run(function run() {})
-.controller('AppCtrl',AppCtrl);
+.controller('AppCtrl',['$scope', '$http',AppCtrl]);

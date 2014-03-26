@@ -8,6 +8,7 @@
     "angular-ui-router": "~0.0.1",
     "angular-ui-utils": "~0.0.3",
     "html5shiv": "~3.7.0",
+    "es5-shim":"~2.3.0",
     "bourbon": "~3.2.0-beta.2",
     "breakpoint-sass": "~2.4.1",
     "normalize-css": "~3.0.0",
