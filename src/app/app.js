@@ -1,6 +1,7 @@
 'use strict';
 
 require('../../vendor/angular/angular');
+require('../../vendor/angular-touch/angular-touch');
 require('../../vendor/angular-ui-router/release/angular-ui-router');
 require('../../vendor/angular-ui-utils/modules/route/route');
 require('../../build/templates');

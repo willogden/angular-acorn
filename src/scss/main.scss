@@ -75,7 +75,7 @@ nav {
 
 	@include susy-breakpoint(max-width $bp-med, $layout-small) {
 		height:100%;
-		@include transition (all 1.0s ease-in-out);
+		@include transition (all 600ms ease-in-out);
 		@include break;
 	}
 
@@ -102,11 +102,12 @@ main {
 
 	height:100%;
 	background-color: $light-gray;
+	overflow: auto;
 
 	@include span(full at 1 isolate);
 
 	@include susy-breakpoint(max-width $bp-med, $layout-med) {
-		@include transition (all 1.0s ease-in-out);
+		@include transition (all 600ms ease-in-out);
 	}
 
 	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {

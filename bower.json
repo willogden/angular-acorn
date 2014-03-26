@@ -4,6 +4,7 @@
   "devDependencies": {
     "angular": "~1.2.15",
     "angular-mocks": "~1.2.15",
+    "angular-touch": "~1.2.15",
     "angular-ui-router": "~0.0.1",
     "angular-ui-utils": "~0.0.3",
     "html5shiv": "~3.7.0",
