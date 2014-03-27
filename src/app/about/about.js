@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = angular.module('angularAcornApp.about', [
+module.exports = angular.module('app.about', [
     'about/about.tpl.html',
-    'ui.state'
+    'ui.router'
 ])
 
 .config(function config($stateProvider) {

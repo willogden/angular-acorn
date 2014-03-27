@@ -3,18 +3,22 @@
 require('../../vendor/angular/angular');
 require('../../vendor/angular-touch/angular-touch');
 require('../../vendor/angular-ui-router/release/angular-ui-router');
-require('../../vendor/angular-ui-utils/modules/route/route');
 require('../../build/templates');
 
-var home = require('./home/home');
-var about = require('./about/about');
+// Import app controller
 var AppCtrl = require('./app-controller');
 
-module.exports = angular.module('angularAcornApp', [
-    home.name,
-    about.name,
-    'ui.state',
-    'ui.route'
+// Import app services
+var listingsService = require('./components/listings-service');
+
+module.exports = angular.module('app', [
+    'ui.router',
+	
+	// Add modules/sections as dependencies
+    require('./home/home').name,
+    require('./about/about').name,
+    require('./listings/listings').name
+    
 ])
 
 .config(function myAppConfig($stateProvider, $urlRouterProvider) {
@@ -22,4 +26,5 @@ module.exports = angular.module('angularAcornApp', [
 })
 
 .run(function run() {})
-.controller('AppCtrl',['$scope', '$http',AppCtrl]);
+.controller('AppCtrl',['$scope', '$http',AppCtrl])
+.factory('listingsService',[listingsService]);

@@ -1,0 +1,15 @@
+.listings {
+	
+	$small-columns: susy-get(columns, $layout-small);
+	
+
+	@include susy-breakpoint(max-width $bp-med, $layout-small) {
+		
+		
+  	}
+
+  	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {	
+  		
+  		
+  	}
+}

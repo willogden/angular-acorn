@@ -2,9 +2,9 @@
 
 var HomeCtrl = require("./home-controller");
 
-module.exports = angular.module('angularAcornApp.home', [
+module.exports = angular.module('app.home', [
     'home/home.tpl.html',
-    'ui.state',
+    'ui.router',
     'ngTouch'
 ])
 .config(function config($stateProvider) {

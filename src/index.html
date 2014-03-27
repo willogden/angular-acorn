@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--[if lt IE 9]>
-<html ng-app="angularAcornApp" ng-controller="AppCtrl" class="no-mqs">
+<html ng-app="app" ng-controller="AppCtrl" class="no-mqs">
 <![endif]-->
 <!--[if !IE ]><!-->
-<html ng-app="angularAcornApp" ng-controller="AppCtrl">
+<html ng-app="app" ng-controller="AppCtrl">
 <!--<![endif]-->
 
 <head>
@@ -35,16 +35,22 @@
 	</header>
 	<nav ng-class="{nav__visible:navVisible, nav__hidden:!navVisible}">
 		<ul>
-			<li ui-route="/home" ng-class="{active:$uiRoute}">
-				<a href="#/home">
+			<li>
+				<a ui-sref="home">
 					<i></i>
 					Home
 				</a>
 			</li>
-			<li ui-route="/about" ng-class="{active:$uiRoute}">
-				<a href="#/about">
+			<li>
+				<a ui-sref="about">
 					<i></i>
 					What is it?
+				</a>
+			</li>
+			<li>
+				<a ui-sref="listings">
+					<i></i>
+					Listings
 				</a>
 			</li>
 

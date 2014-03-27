@@ -1,4 +1,4 @@
-var angularAcornApp = require("./app");
+var app = require("./app");
 var AppCtrl = require('./app-controller');
 
 describe('AppCtrl', function() {
