@@ -6,15 +6,11 @@ module.exports = function($scope, $location) {
         }
     });
 
-    $scope.navClass = "nav__hidden";
+    $scope.navVisible = false;
 
-    $scope.toggleNavClass = function() {
+    $scope.toggleNav = function() {
 
-        if ($scope.navClass === "nav__hidden") {
-            $scope.navClass = "nav__visible";
-        } else {
-            $scope.navClass = "nav__hidden";
-        }
+        $scope.navVisible = !$scope.navVisible;
 
     };
     
