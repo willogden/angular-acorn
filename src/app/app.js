@@ -25,6 +25,9 @@ module.exports = angular.module('app', [
     $urlRouterProvider.otherwise('/home');
 })
 
-.run(function run() {})
+.run(['$rootScope', '$state', '$stateParams', function ($rootScope,   $state,   $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+}])
 .controller('AppCtrl',['$scope', '$http',AppCtrl])
 .factory('listingsService',[listingsService]);

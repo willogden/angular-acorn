@@ -1,0 +1,16 @@
+.home__subnav {
+
+	> ul {
+		float: left;
+		padding: em(5) 0 em(5) 0;
+		@include gutters;
+
+		li {
+			float: left;
+			padding: 0 em(20) 0 0;
+			color: $base-accent-opposite-color;
+		}
+	}
+
+}
+

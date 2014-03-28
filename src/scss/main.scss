@@ -22,6 +22,8 @@ $layout-xl: layout(16);
 
 $breakpoint-no-query-fallbacks: true;
 
+$header-height: 2em;
+
 html {
 	height:100%;
 }
@@ -31,69 +33,82 @@ body {
 	@include container($layout-xl);
 }
 
+.active {
+	color: $hover-link-color;
+}
+
 header {
 
-	padding: 10px;
-
+	padding: em(5) em(5) em(5) em(5);
+	overflow: hidden;
+	height: $header-height;
+	
 	button {
-		margin: 5px;
 		float: right;
 		width: 4em;
 	}
 
-	h3 {
-		float:left;
-	}
+	
 
 	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
 
-		padding: 80px 0px 10px 0px;
-
-		@include span(3 at 2 isolate);
+		margin-top: 2em;
 
 		button {
 			display: none;
 		}
+
+		h3 {
+			margin-left: 10%;
+		}
 	}
 }
 
-nav {
+.nav {
 
-	border-top: 2px solid $base-accent-color;
-	border-right: 2px solid $base-accent-color;
-	border-bottom: 2px solid $base-accent-color;
-
-	@include border-right-radius(3px);
-
-	ul {
-		li {
-			padding: 5px;
-		}
-	}
-
+	border-top: em(2) solid $base-accent-color;
+	border-right: em(2) solid $base-accent-color;
+	border-bottom: em(2) solid $base-accent-color;
+	@include border-right-radius(em(3));
 	@include span(3 at span(-3 wide) isolate);
 
 	@include susy-breakpoint(max-width $bp-med, $layout-small) {
+
 		height:100%;
 		@include transition (all 600ms ease-in-out);
 		@include break;
+
 	}
 
 	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
 
 		height:initial;
 		border: none;
-		padding: 80px 0px 10px 0px;
+		margin-top:-$header-height;
 
-		@include span(3 at 5 isolate);
+		@include span(full at 1 isolate);
+		@include gutters(0em);
 
-		ul {
+		> ul {
+
 			float: right;
+			margin-right: 10%;
+			margin-bottom: em(40);
 
 			li {
 				float: left;
-				padding: 5px 20px 5px 20px;
+				padding: 0 0 0 em(40);
 			}
+
+		}
+
+		.nav__sub {
+
+			clear:both;
+			overflow: hidden;
+			background-color: $base-accent-color;
+			@include gutters;
+
 		}
 	}
 }
@@ -103,24 +118,29 @@ main {
 	height:100%;
 	background-color: $light-gray;
 	overflow: auto;
-
 	@include span(full at 1 isolate);
 
 	@include susy-breakpoint(max-width $bp-med, $layout-med) {
+
 		@include transition (all 600ms ease-in-out);
+
 	}
 
 	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
+
 		@include span(full at 1 isolate break);
+
 	}
 }
 
-nav.nav__visible {
+.nav__visible {
+
 	@include push(0);
 
     ~ main {
     	@include push(3);
     }
+    
 }
 
 

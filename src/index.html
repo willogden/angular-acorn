@@ -7,59 +7,59 @@
 <!--<![endif]-->
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title ng-bind="pageTitle"></title>
-	
-	<!--[if lt IE 9]><% if(config.paths["stylesheets-ie"].length > 0) {  %>
+    <title ng-bind="pageTitle"></title>
+
+    <!--[if lt IE 9]><% if(config.paths["stylesheets-ie"].length > 0) {  %>
     <link type="text/css" rel="stylesheet" media="all" href="app-ie.css"></script><% }; %>
     <![endif]-->
-	<link type="text/css" rel="stylesheet" media="all" href="app.css">
-	   
-	<!--[if lt IE 9]><% if(config.paths["scripts-ie"].length > 0) { %>
+    <link type="text/css" rel="stylesheet" media="all" href="app.css">
+
+    <!--[if lt IE 9]><% if(config.paths["scripts-ie"].length > 0) { %>
     <script type="text/javascript" src="app-ie.js"></script><% }; %>
     <![endif]-->
-	<script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="app.js"></script>
 </head>
 
 <body>
-	<header>
-		<button ng-click="toggleNav()">MENU</button>
-		<h3>Angular Acorn
-			<small><a href="#">v<%= version %></a>
-			</small>
-		</h3>
-	</header>
-	<nav ng-class="{nav__visible:navVisible, nav__hidden:!navVisible}">
-		<ul>
-			<li>
-				<a ui-sref="home">
-					<i></i>
-					Home
-				</a>
-			</li>
-			<li>
-				<a ui-sref="about">
-					<i></i>
-					What is it?
-				</a>
-			</li>
-			<li>
-				<a ui-sref="listings">
-					<i></i>
-					Listings
-				</a>
-			</li>
+    <header>
+        <button ng-click="toggleNav()">MENU</button>
+        <h3>Angular Acorn
+            <small><a href="#">v<%= version %></a>
+            </small>
+        </h3>
+    </header>
+    <nav class="nav" ng-class="{'nav__visible':navVisible, 'nav__hidden':!navVisible}">
+        <ul>
+            <li>
+                <a ui-sref="home" ui-sref-active="active">
+                    <i></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a ui-sref="about" ui-sref-active="active">
+                    <i></i>
+                    What is it?
+                </a>
+            </li>
+            <li>
+                <a ui-sref="listings" ui-sref-active="active">
+                    <i></i>
+                    Listings
+                </a>
+            </li>
+        </ul>
+        <nav class="nav__sub" ui-view="subNav"></nav>
+    </nav>
 
-		</ul>
-	</nav>
+    <main ui-view="main"></main>
 
-	<main ui-view="main"></main>
-
-	<footer class="footer"></footer>
+    <footer class="footer"></footer>
 </body>
 
 </html>

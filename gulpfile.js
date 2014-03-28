@@ -18,7 +18,7 @@ var livereload = require('gulp-livereload');
 var pkg = require('./package.json');
 
 // Live reload server
-var server = livereload();
+var server;
 
 /**
  * Store environment variables
@@ -305,6 +305,8 @@ gulp.task('default', ['build'], function() {
 gulp.task('watch', function() {
 
     setRelease(false);
+    
+    server = livereload();
 
     gulp.watch(['./src/app/**/*.js','./src/**/*.html'],['js','html']);
     gulp.watch(['./src/app/**/*.scss','./src/scss/**/*.scss'],['css']);

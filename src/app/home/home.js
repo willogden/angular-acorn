@@ -1,9 +1,11 @@
 'use strict';
 
 var HomeCtrl = require("./home-controller");
+var HomeSubNavCtrl = require("./home-subnav/home-subnav-controller");
 
 module.exports = angular.module('app.home', [
     'home/home.tpl.html',
+    'home/home-subnav/home-subnav.tpl.html',
     'ui.router',
     'ngTouch'
 ])
@@ -15,6 +17,10 @@ module.exports = angular.module('app.home', [
             "main": {
                 controller: 'HomeCtrl',
                 templateUrl: 'home/home.tpl.html'
+            },
+            "subNav": {
+                controller: 'HomeSubNavCtrl',
+                templateUrl: 'home/home-subnav/home-subnav.tpl.html'
             }
         },
         data: {
@@ -23,4 +29,5 @@ module.exports = angular.module('app.home', [
     });
     
 })
-.controller('HomeCtrl', ['$scope', '$http',HomeCtrl]);
+.controller('HomeCtrl', ['$scope',HomeCtrl])
+.controller('HomeSubNavCtrl', ['$scope',HomeSubNavCtrl]);
