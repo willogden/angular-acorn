@@ -1,7 +1,7 @@
 angular-acorn
 =============
 
-AngularJS seed project using Browserify, Bourbon, Susy Next, and Gulp. Inspired by [ngBoilerplate](http://joshdmiller.github.com/ng-boilerplate).
+AngularJS seed project using Browserify, Bourbon, Susy, and Gulp. Inspired by [ngBoilerplate](http://joshdmiller.github.com/ng-boilerplate).
 
 ## Installation
 
@@ -13,7 +13,7 @@ $ cd angular-acorn
 $ sudo npm -g install gulp bower
 $ npm install
 $ bower install
-$ gulp watch
+$ gulp build
 ```
 
 Then open `file:///path/to/angular-acorn/build/index.html` in your browser.
@@ -25,5 +25,5 @@ Then open `file:///path/to/angular-acorn/build/index.html` in your browser.
 - [Gulp](http://gulpjs.com/) for super fast task running and build automation
 - [Browserify](http://browserify.org/) to handle dependency management
 - [Bourbon](http://bourbon.io/) to provide some nice pure Sass mixin's
-- [Susy Next](http://susydocs.oddbird.net/en/latest/) for great semantic grids using (Breakpoint)[http://breakpoint-sass.com/] for media query support
+- [Susy](http://susydocs.oddbird.net/en/latest/) for great semantic grids using (Breakpoint)[http://breakpoint-sass.com/] for media query support
 - [Jasmine](http://jasmine.github.io/) and [Karma](http://karma-runner.github.io/0.12/index.html)
