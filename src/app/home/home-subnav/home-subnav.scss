@@ -3,7 +3,6 @@
 	> ul {
 		float: left;
 		padding: em(5) 0 em(5) 0;
-		@include gutters;
 
 		li {
 			float: left;

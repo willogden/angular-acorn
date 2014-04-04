@@ -70,7 +70,7 @@ header {
 	border-right: em(2) solid $base-accent-color;
 	border-bottom: em(2) solid $base-accent-color;
 	@include border-right-radius(em(3));
-	@include span(3 at span(-3 wide) isolate);
+	@include span(3 at span(-3) isolate);
 
 	@include susy-breakpoint(max-width $bp-med, $layout-small) {
 

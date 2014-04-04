@@ -8,7 +8,7 @@
 	.home__content-two {
 
 		padding:em(10);
-		
+
 	}
 
 	@include susy-breakpoint(max-width $bp-med, $layout-small) {
@@ -23,14 +23,14 @@
 	  	.home__content-two {
 
 	  		@include transition (all 1.0s ease-in-out);
-	  		@include span($small-columns at span($small-columns wide) isolate);
+	  		@include span($small-columns at span($small-columns) isolate);
 
 	  	}
 
 	  	.home__content-one--hidden {
 
 	  		@include transition (all 1.0s ease-in-out);
-	  		@include span($small-columns at span(0-$small-columns wide) isolate);
+	  		@include span($small-columns at span(0-$small-columns) isolate);
 
 	  	}
 
