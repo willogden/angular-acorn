@@ -16,7 +16,7 @@ $ bower install
 $ gulp build
 ```
 
-Then open `file:///path/to/angular-acorn/build/index.html` in your browser.
+Then open `file:///path/to/angular-acorn/build/index.html` in your browser. Here's a [demo](http://willo.gd/en/demos/angular-acorn/index.html)
 
 ## Features
 
