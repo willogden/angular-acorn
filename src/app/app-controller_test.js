@@ -2,7 +2,7 @@ var app = require("./app");
 var AppCtrl = require('./app-controller');
 
 describe('AppCtrl', function() {
-  
+
     describe('isCurrentUrl', function() {
         var $scope,$location,ctrl;
 

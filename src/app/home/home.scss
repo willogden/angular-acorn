@@ -1,7 +1,8 @@
 .home {
+
 	
 	$small-columns: susy-get(columns, $layout-small);
-	
+
 	overflow-x: hidden;
 
 	.home__content-one,
@@ -12,7 +13,7 @@
 	}
 
 	@include susy-breakpoint(max-width $bp-med, $layout-small) {
-		
+
 		.home__content-one {
 
 	  		@include transition (all 1.0s ease-in-out);
@@ -42,8 +43,8 @@
 	  	}
   	}
 
-  	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {	
-  		
+  	@include susy-breakpoint($bp-med, $layout-med, $no-query: '.no-mqs') {
+
   		/* Get number of columns */
 		$layout-med-columns: susy-get(columns,$layout-med);
 
@@ -56,13 +57,13 @@
 		}
 
   		.home__content-one {
-  			
+
   			@include span($layout-med-columns/2 of $layout-med-columns);
-  			
+
   		}
 
   		.home__content-two {
-  			
+
   			@include span($layout-med-columns/2 of $layout-med-columns);
 
   		}

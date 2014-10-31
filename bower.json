@@ -1,19 +1,19 @@
 {
   "name": "angular-acorn",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "devDependencies": {
-    "angular": "~1.2.15",
-    "angular-mocks": "~1.2.15",
-    "angular-touch": "~1.2.15",
-    "angular-ui-router": "~0.2.10",
-    "html5shiv": "~3.7.0",
-    "es5-shim":"~2.3.0",
-    "bourbon": "~3.2.0-beta.2",
-    "breakpoint-sass": "~2.4.1",
-    "normalize-css": "~3.0.0",
-    "susy": "~2.1.0"
+    "angular": "~1.3.1",
+    "angular-mocks": "~1.3.1",
+    "angular-touch": "~1.2.27",
+    "angular-ui-router": "0.2.11",
+    "es5-shim": "~2.3.0",
+    "bourbon": "~4.0.2",
+    "breakpoint-sass": "~2.5.0",
+    "susy": "~2.1.0",
+    "normalize-scss": "~3.0.1"
   },
-  "dependencies": {
-
+  "dependencies": {},
+  "resolutions": {
+    "angular": "1.3.1-build.3464+sha.d97b427"
   }
 }

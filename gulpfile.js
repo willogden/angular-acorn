@@ -1,29 +1,33 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
-var streamify = require('gulp-streamify');
+var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
+var ngAnnotate = require('gulp-ng-annotate');
+var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var ngHtml2Js = require("gulp-ng-html2js");
 var minifyHtml = require("gulp-minify-html");
-var minifyCSS = require("gulp-minify-css");
 var clean = require('gulp-clean');
 var inject = require("gulp-inject");
 var sass = require('gulp-ruby-sass');
 var rename = require('gulp-rename');
-var ngmin = require('gulp-ngmin');
 var template = require('gulp-template');
 var karma = require('gulp-karma');
 var livereload = require('gulp-livereload');
+var watch = require('gulp-watch');
+var glob = require("glob")
 var pkg = require('./package.json');
 
-// Live reload server
-var server;
 
 /**
  * Store environment variables
  */
-var env = {};
+var env = {
+    destFolder: "./dist",
+    buildFolder: "./build",
+};
+
 
 /**
  * Helper for use in manipulating paths based on evironment build type
@@ -38,77 +42,18 @@ String.prototype.format = function() {
     );
 };
 
-/**
-* Set environment vars
-*/
-var setRelease = function(isRelease) {
-    
-    if(isRelease) {
-        env.release = true;
-        env.destFolder = './dist';
-    }
-    else {    
-        env.release = false;
-        env.destFolder = './build';
-    }
-
-};
-
-/**
-* css helper
-*/
-var processCSS = function(srcArray,destFilename) {
-
-    if(srcArray.length > 0) {
-
-        var cssPipe = gulp.src(srcArray)
-            .pipe(concat(destFilename));
-
-        if (env.release) {
-            cssPipe = cssPipe
-                .pipe(minifyCSS());
-        }
-
-        return cssPipe
-            .pipe(gulp.dest(env.destFolder));
-    }
-
-}
-
-/**
-* JS helper
-*/
-var processJS = function(srcArray,destFilename) {
-
-    if(srcArray.length > 0) {
-
-        var jsPipe = gulp.src(srcArray);
-            
-        // Only uglify in release builds
-        if (env.release) {
-
-            jsPipe = jsPipe
-                .pipe(uglify());
-        }
-
-        return jsPipe
-            .pipe(concat(destFilename))
-            .pipe(gulp.dest(env.destFolder));
-    }
-
-}
 
 /**
 * Clean the build and dist directorys
 */
 gulp.task('clean', function() {
 
-    return gulp.src(['./dist', './build'], {
+    return gulp.src([env.destFolder, env.buildFolder], {
         read: false
-    })
-        .pipe(clean());
+    }).pipe(clean());
 
 });
+
 
 /**
 * Convert the html partials into js file to be required into Browserify
@@ -125,68 +70,48 @@ gulp.task('templates', function() {
             stripPrefix: "app/"
         }))
         .pipe(concat("templates.js"))
-        .pipe(uglify())
-        .pipe(gulp.dest("./build")); // Always store the compiled templates in build folder as need single location for require statement. Don't want to put into src folder.
+        .pipe(gulp.dest(env.buildFolder)); // Always store the compiled templates in build folder as need single location for require statement. Don't want to put into src folder.
 
 });
+
 
 /**
 * Browserify app
 */
 gulp.task('browserify', ['templates'], function() {
 
-    var bundleStream = browserify('./src/app/app.js').bundle({
-        debug: !env.release
-    }).pipe(source('../app.js'));
-
-    // Make safe for minification
-    if (env.release) {
-        bundleStream = bundleStream
-            .pipe(streamify(ngmin()));
-    }
-
-    return bundleStream.pipe(gulp.dest('{0}/app.js'.format(env.destFolder)));
-
+    return browserify('./src/app/app.js',{debug: true})
+          .bundle()
+          .pipe(source('../app.js'))
+          .pipe(buffer())
+          .pipe(sourcemaps.init({loadMaps: true}))
+          .pipe(ngAnnotate())
+          .pipe(uglify())
+          .pipe(sourcemaps.write('./'))
+          .pipe(gulp.dest('{0}/app.js'.format(env.destFolder)));
 });
+
 
 /**
 * Introspect src folder for sass files, then preprocess
 */
-gulp.task('sass', function() {
+gulp.task('css', function() {
 
-    return gulp.src('./src/scss/main.scss')
-        .pipe(inject(gulp.src(["./src/app/**/*.scss"], {
+    return gulp.src('./src/scss/app.scss')
+        .pipe(inject(gulp.src(["./src/app/**/*.scss","!./src/app/**/_*.scss"], {
             read: false
         }), {
             transform: function(filepath) {
-                return "@import '../.." + filepath + "';"
+                return "@import '../.." + filepath + "'; /* " + filepath + " */"
             },
             starttag: "/* inject:scss */",
             endtag: "/* endinject */"
         }))
-        .pipe(sass())
-        .pipe(rename('app.css'))
+        .pipe(sass({ style: 'compressed' }))
         .pipe(gulp.dest(env.destFolder));
 
 });
 
-/**
-* Concat external css files and app css
-*/
-gulp.task('css', ['sass'], function() {
-
-    return processCSS(pkg.config.paths["stylesheets"].concat(['{0}/app.css'.format(env.destFolder)]),'app.css');
-
-});
-
-/**
-* Concat external css specific to IE
-*/
-gulp.task('css-ie', ['sass'], function() {
-
-    return processCSS(pkg.config.paths["stylesheets-ie"],'app-ie.css');
-
-});
 
 /**
 * Copy & template index.html to destination folder
@@ -197,38 +122,30 @@ gulp.task('html', function() {
         .pipe(gulp.dest(env.destFolder));
 });
 
+
 /**
 * Concat external js and app js
 */
 gulp.task('js', ['browserify'], function() {
 
     // Remove templates.js as browserify'ed into app.js already
-    gulp.src('./build/templates.js', {
+    return gulp.src('./build/templates.js', {
         read: false
     })
     .pipe(clean({
         force: true
     }));
 
-    return processJS(pkg.config.paths["scripts"].concat(['{0}/app.js'.format(env.destFolder)]),'app.js');
-
 });
 
-/**
-* Concat external js specific to IE
-*/
-gulp.task('js-ie', function() {
-
-    return processJS(pkg.config.paths["scripts-ie"],'app-ie.js');
-
-});
 
 /**
 * Introspect for tests and create test entrypoint js file for Browserify
 */
-gulp.task('create-tests', ['templates'], function() {
+gulp.task('create-tests',["templates"], function() {
 
     return gulp.src('./src/app/tests.js')
+        .pipe(rename('tests-introspected.js'))
         .pipe(inject(gulp.src(["./src/app/**/*_test.js"], {
             read: false
         }), {
@@ -238,57 +155,59 @@ gulp.task('create-tests', ['templates'], function() {
             starttag: "/* inject:js */",
             endtag: "/* endinject */"
         }))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('{0}'.format(env.buildFolder)));
 });
+
 
 /**
 * Browserify tests
 */
 gulp.task('browserify-tests', ['create-tests'], function() {
 
-    return browserify('./build/tests.js').bundle({
-        debug: true
-    })
+    return browserify('{0}/tests-introspected.js'.format(env.buildFolder),{debug: true})
+    .bundle()
     .pipe(source('../tests.js'))
-    .pipe(gulp.dest('./build/tests.js'));
+    .pipe(gulp.dest('{0}/tests.js'.format(env.buildFolder)));
 
 });
+
 
 /**
 * Create build version
 */
 gulp.task('build', ['clean'], function() {
-    
-    setRelease(false);
 
     // Must use start to ensure clean has completed
-    gulp.start('js', 'js-ie', 'css', 'css-ie', 'html');
+    gulp.start('js', 'css', 'html');
 
 });
 
-/**
-* Create release version
-*/
-gulp.task('release', ['clean'], function() {
-    
-    setRelease(true);
-
-    // Must use start to ensure clean has completed
-    gulp.start('js', 'js-ie', 'css', 'css-ie', 'html');
-
-});
 
 /**
 * Run tests
 */
-gulp.task('test', ['browserify-tests'], function() {
+gulp.task('test', function() {
 
-    return gulp.src(['./build/tests.js'])
+    // Kill any dead karma instances that are lying around
+    /*
+    child = exec('killall node',
+      function (error, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+    });
+    */
+
+    // Including es5 shim as PhantomJS has old version of webkit
+    return gulp.src(['./vendor/es5-shim/es5-shim.min.js','./src/app/**/*_fixtures.html','{0}/*.css'.format(env.distFolder),'{0}/tests.js'.format(env.buildFolder)])
         .pipe(karma({
             configFile: 'karma.conf.js',
-            action: 'run'
-        }));
+            action: 'watch'
+        })).on('error', function(err) {
+            // Make sure failed tests cause gulp to exit non-zero
+            throw err;
+        });
 });
+
 
 /**
 * Create build version then watch for changes
@@ -299,21 +218,33 @@ gulp.task('default', ['build'], function() {
 
 });
 
+
 /**
 * Watch for changes
 */
 gulp.task('watch', function() {
 
-    setRelease(false);
-    
-    server = livereload();
-
-    gulp.watch(['./src/app/**/*.js','./src/**/*.html'],['js','html']);
-    gulp.watch(['./src/app/**/*.scss','./src/scss/**/*.scss'],['css']);
-    gulp.watch(['./build/app.js'],['test']);
-
-    gulp.watch('./build/**').on('change', function(file) {
-        server.changed(file.path);
+    watch('./src/app/**/*.js', {emitOnGlob: false}, function () {
+        gulp.start('js');
     });
+
+    watch(['./src/app/**/*.scss','./src/scss/**/*.scss'], {emitOnGlob: false}, function () {
+        gulp.start('css');
+    });
+
+    watch(['./dist/app.js'], {emitOnGlob: false}, function () {
+        gulp.start('browserify-tests');
+    });
+
+    watch(['./src/images/**/*.*'], {emitOnGlob: false}, function () {
+        gulp.start('images');
+    });
+
+    watch(['{0}/**'.format(env.distFolder)], {emitOnGlob: false}, function (files) {
+        return files.pipe(livereload());
+    });
+
+    // Fire up Karma which watches for changes to browserified tests
+    gulp.start('browserify-tests','test');
 
 });
