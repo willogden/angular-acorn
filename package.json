@@ -27,6 +27,38 @@
     "vinyl-buffer": "~1.0.0",
     "gulp-ng-annotate": "~0.3.3",
     "glob": "~4.0.6",
-    "gulp-watch": "~1.1.0"
+    "gulp-watch": "~1.1.0",
+    "browserify-shim": "~3.8.0"
+  },
+  "browser": {
+    "angular": "./vendor/angular/angular.js",
+    "angular-mocks": "./vendor/angular-mocks/angular-mocks.js",
+    "angular-touch": "./vendor/angular-touch/angular-touch.js",
+    "angular-ui-router": "./vendor/angular-ui-router/release/angular-ui-router.js"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "angular": {
+      "exports": "angular"
+    },
+    "angular-mocks": {
+      "depends": [
+        "angular"
+      ]
+    },
+    "angular-touch": {
+      "depends": [
+        "angular"
+      ]
+    },
+    "angular-ui-router": {
+      "depends": [
+        "angular"
+      ]
+    }
   }
 }

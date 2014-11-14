@@ -1,7 +1,8 @@
 'use strict';
 
-require('../vendor/angular/angular');
-require('../vendor/angular-mocks/angular-mocks');
+require('angular');
+require('angular-mocks');
+
 
 /* Introspected tests */
 
