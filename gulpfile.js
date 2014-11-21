@@ -126,7 +126,7 @@ gulp.task('html', function() {
 /**
 * Concat external js and app js
 */
-gulp.task('js', ['browserify'], function() {
+gulp.task('js', ['browserify','browserify-tests'], function() {
 
     // Remove templates.js as browserify'ed into app.js already
     return gulp.src('./build/templates.js', {
@@ -186,7 +186,7 @@ gulp.task('build', ['clean'], function() {
 /**
 * Run tests
 */
-gulp.task('test', function() {
+gulp.task('test',['browserify-tests'], function() {
 
     // Kill any dead karma instances that are lying around
     /*
@@ -224,16 +224,12 @@ gulp.task('default', ['build'], function() {
 */
 gulp.task('watch', function() {
 
-    watch('./src/app/**/*.js', {emitOnGlob: false}, function () {
+    watch(['./src/app/**/*.js','./src/app/**/*.html'], {emitOnGlob: false}, function () {
         gulp.start('js');
     });
 
     watch(['./src/app/**/*.scss','./src/scss/**/*.scss'], {emitOnGlob: false}, function () {
         gulp.start('css');
-    });
-
-    watch(['./dist/app.js'], {emitOnGlob: false}, function () {
-        gulp.start('browserify-tests');
     });
 
     watch(['./src/images/**/*.*'], {emitOnGlob: false}, function () {
@@ -245,6 +241,6 @@ gulp.task('watch', function() {
     });
 
     // Fire up Karma which watches for changes to browserified tests
-    gulp.start('browserify-tests','test');
+    gulp.start('test');
 
 });
