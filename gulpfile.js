@@ -15,7 +15,6 @@ var rename = require('gulp-rename');
 var template = require('gulp-template');
 var karma = require('gulp-karma');
 var livereload = require('gulp-livereload');
-var watch = require('gulp-watch');
 var glob = require("glob")
 var pkg = require('./package.json');
 
@@ -224,21 +223,14 @@ gulp.task('default', ['build'], function() {
 */
 gulp.task('watch', function() {
 
-    watch(['./src/app/**/*.js','./src/app/**/*.html'], {emitOnGlob: false}, function () {
-        gulp.start('js');
-    });
+    // Build tasks
+    gulp.watch(['./src/app/**/*.js','./src/app/**/*.html'], ['js']);
+    gulp.watch(['./src/app/**/*.scss','./src/scss/**/*.scss'], ['css']);
+    gulp.watch(['./src/images/**/*.*'],['images']);
 
-    watch(['./src/app/**/*.scss','./src/scss/**/*.scss'], {emitOnGlob: false}, function () {
-        gulp.start('css');
-    });
-
-    watch(['./src/images/**/*.*'], {emitOnGlob: false}, function () {
-        gulp.start('images');
-    });
-
-    watch(['{0}/**'.format(env.distFolder)], {emitOnGlob: false}, function (files) {
-        return files.pipe(livereload());
-    });
+    // Livereload
+    livereload.listen();
+    gulp.watch(['{0}/**'.format(env.distFolder)]).on('change', livereload.changed);
 
     // Fire up Karma which watches for changes to browserified tests
     gulp.start('test');
